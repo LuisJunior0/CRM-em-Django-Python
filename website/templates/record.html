@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card shadow-sm border-0 mt-4">
+  <h5 class="card-header bg-warning text-dark fw-bold">
+    Registro Completo
+  </h5>
+  <div class="card-body">
+    <h5 class="card-title mb-4 text-secondary">{{ customer_record.razao_social }}</h5>
+    
+    <table class="table table-bordered align-middle">
+      <tbody>
+        <tr><th>Nome Fantasia</th><td>{{ customer_record.nome_fantasia }}</td></tr>
+        <tr><th>CNPJ</th><td>{{ customer_record.cnpj }}</td></tr>
+        <tr><th>Inscrição Estadual</th><td>{{ customer_record.inscricao_estadual }}</td></tr>
+        <tr><th>Inscrição Municipal</th><td>{{ customer_record.inscricao_municipal }}</td></tr>
+        <tr><th>CEP</th><td>{{ customer_record.cep }}</td></tr>
+        <tr><th>Logradouro</th><td>{{ customer_record.logradouro }}</td></tr>
+        <tr><th>Complemento</th><td>{{ customer_record.complemento }}</td></tr>
+        <tr><th>Bairro</th><td>{{ customer_record.bairro }}</td></tr>
+        <tr><th>Município</th><td>{{ customer_record.municipio }}</td></tr>
+        <tr><th>UF</th><td>{{ customer_record.uf }}</td></tr>
+        <tr><th>Email</th><td>{{ customer_record.email }}</td></tr>
+        <tr><th>Telefone Fixo</th><td>{{ customer_record.telefone_fixo }}</td></tr>
+        <tr><th>Criado Em</th><td>{{ customer_record.created_at }}</td></tr>
+        <tr><th>ID</th><td>{{ customer_record.id }}</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<br/>
+<a href="{% url 'home' %}" class="btn btn-secondary">Voltar</a>
+<a href="{% url 'delete_record' customer_record.id %}" class="btn btn-danger">Deletar</a>
+
+<a href="{% url 'update_record' customer_record.id %}" class="btn btn-primary">Atualizar Registro</a>
+
+
+
+{% endblock %}
