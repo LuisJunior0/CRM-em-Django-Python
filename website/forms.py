@@ -35,20 +35,27 @@ class SignUpForm(UserCreationForm):
 
 
 class AddRecordForm(forms.ModelForm):
-	razao_social = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Razão Social", "class": "form-control"}), label="")
-	nome_fantasia = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Nome Fantasia", "class": "form-control"}), label="")
-	cnpj = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "CNPJ", "class": "form-control"}), label="")
-	inscricao_estadual = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder": "Inscrição Estadual (opcional)", "class": "form-control"}), label="")
-	inscricao_municipal = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder": "Inscrição Municipal (opcional)", "class": "form-control"}), label="")
-	cep = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "CEP", "class": "form-control"}), label="")
-	logradouro = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Logradouro", "class": "form-control"}), label="")
-	complemento = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder": "Complemento (opcional)", "class": "form-control"}), label="")
-	bairro = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Bairro", "class": "form-control"}), label="")
-	municipio = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Município", "class": "form-control"}), label="")
-	uf = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "UF", "class": "form-control"}), label="")
-	email = forms.CharField(required=True, widget=forms.EmailInput(attrs={"placeholder": "E-mail", "class": "form-control"}), label="")
-	telefone_fixo = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Telefone Fixo", "class": "form-control"}), label="")
+    razao_social = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Razão Social", "class": "form-control"}), label="")
+    nome_fantasia = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Nome Fantasia", "class": "form-control"}), label="")
+    cnpj = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "CNPJ", "class": "form-control"}), label="")
+    inscricao_estadual = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder": "Inscrição Estadual (opcional)", "class": "form-control"}), label="")
+    inscricao_municipal = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder": "Inscrição Municipal (opcional)", "class": "form-control"}), label="")
+    cep = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "CEP", "class": "form-control"}), label="")
+    logradouro = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Logradouro", "class": "form-control"}), label="")
+    complemento = forms.CharField(required=False, widget=forms.TextInput(attrs={"placeholder": "Complemento (opcional)", "class": "form-control"}), label="")
+    bairro = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Bairro", "class": "form-control"}), label="")
+    municipio = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Município", "class": "form-control"}), label="")
+    uf = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "UF", "class": "form-control"}), label="")
+    email = forms.CharField(required=True, widget=forms.EmailInput(attrs={"placeholder": "E-mail", "class": "form-control"}), label="")
+    telefone_fixo = forms.CharField(required=True, widget=forms.TextInput(attrs={"placeholder": "Telefone Fixo", "class": "form-control"}), label="")
 
-	class Meta:
-		model = Record
-		exclude = ("user",)
+    class Meta:
+        model = Record
+        exclude = ("user",)
+
+    
+    def clean_cep(self):
+        cep = self.cleaned_data.get('cep', '').strip()
+        
+        cep = ''.join(filter(str.isdigit, cep))
+        return cep

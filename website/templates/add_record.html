@@ -2,21 +2,68 @@
 {% block content %}
 
 <div class="col-md-6 offset-md-3">
-<h1>Add record</h1>
+<h1>Adicionar Cliente</h1>
 <br/>
 
 <form method="POST" action="{% url 'add_record' %}">
-	{% csrf_token %}
+    {% csrf_token %}
 
-	{{ form.as_p }}
+    {{ form.as_p }}
 
-
-<br/>
-<button type="submit" class="btn btn-secondary">Adicionar Cliente</button>
-
-
-
+    <br/>
+    <button type="submit" class="btn btn-secondary">Adicionar Cliente</button>
 </form>
+</div>
 
+<script>
+// Função para aplicar máscara de CNPJ
+function mascaraCNPJ(value) {
+    value = value.replace(/\D/g, ""); // remove tudo que não é número
+    value = value.replace(/^(\d{2})(\d)/, "$1.$2"); // coloca ponto após os dois primeiros dígitos
+    value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3"); // ponto após o terceiro bloco
+    value = value.replace(/\.(\d{3})(\d)/, ".$1/$2"); // barra antes do 4º bloco
+    value = value.replace(/(\d{4})(\d)/, "$1-$2"); // hífen antes dos 2 últimos dígitos
+    return value;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const cnpjInput = document.querySelector('input[name="cnpj"]');
+
+    // Aplica máscara enquanto digita
+    cnpjInput.addEventListener('input', function() {
+        this.value = mascaraCNPJ(this.value);
+    });
+
+    // Quando o usuário sai do campo, consulta a API
+    cnpjInput.addEventListener('blur', function() {
+        const cnpj = this.value.replace(/\D/g, ''); // remove máscara
+
+        if (cnpj.length === 14) {
+            fetch(`/consulta_cnpj/?cnpj=${cnpj}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.error) {
+                        document.querySelector('input[name="razao_social"]').value = data.razao_social;
+                        document.querySelector('input[name="nome_fantasia"]').value = data.nome_fantasia;
+                        document.querySelector('input[name="inscricao_estadual"]').value = data.inscricao_estadual;
+                        document.querySelector('input[name="inscricao_municipal"]').value = data.inscricao_municipal;
+                        document.querySelector('input[name="cep"]').value = data.cep;
+                        document.querySelector('input[name="logradouro"]').value = data.logradouro;
+                        document.querySelector('input[name="complemento"]').value = data.complemento;
+                        document.querySelector('input[name="bairro"]').value = data.bairro;
+                        document.querySelector('input[name="municipio"]').value = data.municipio;
+                        document.querySelector('input[name="uf"]').value = data.uf;
+                    } else {
+                        alert(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao consultar CNPJ:', error);
+                    alert('Erro ao consultar CNPJ. Tente novamente.');
+                });
+        }
+    });
+});
+</script>
 
 {% endblock %}
